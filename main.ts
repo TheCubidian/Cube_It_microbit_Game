@@ -16,9 +16,7 @@ pins.touchSetMode(TouchTarget.P2, TouchTargetMode.Resistive)
 pins.touchSetMode(TouchTarget.LOGO, TouchTargetMode.Resistive)
 basic.forever(function () {
     if (startScreen == 0) {
-        if (input.buttonIsPressed(Button.A) || input.buttonIsPressed(Button.B) || (input.buttonIsPressed(Button.AB) || input.pinIsPressed(TouchPin.P0) || (input.pinIsPressed(TouchPin.P1) || input.pinIsPressed(TouchPin.P2)))) {
-            startScreen = 1
-        }
+    	
     } else if (input.logoIsPressed()) {
         restart = 1
     }
@@ -38,6 +36,19 @@ basic.forever(function () {
     while (startScreen == 0 || restart == 1) {
         startScreen = 0
         restart = 0
+        if (input.buttonIsPressed(Button.A) || input.buttonIsPressed(Button.B) || (input.buttonIsPressed(Button.AB) || input.pinIsPressed(TouchPin.P2))) {
+            startScreen = 1
+        } else if (input.pinIsPressed(TouchPin.P0)) {
+            music.setVolume(music.volume() - 20)
+            music.play(music.tonePlayable(262, music.beat(BeatFraction.Whole)), music.PlaybackMode.InBackground)
+            basic.pause(100)
+            continue;
+        } else if (input.pinIsPressed(TouchPin.P1)) {
+            music.setVolume(music.volume() + 20)
+            music.play(music.tonePlayable(262, music.beat(BeatFraction.Whole)), music.PlaybackMode.InBackground)
+            basic.pause(100)
+            continue;
+        }
         basic.showLeds(`
             # # . # #
             # # . # #
