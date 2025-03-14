@@ -1,6 +1,20 @@
+function startScreenControls () {
+    if (input.buttonIsPressed(Button.A) || input.buttonIsPressed(Button.B) || (input.buttonIsPressed(Button.AB) || input.pinIsPressed(TouchPin.P2))) {
+        startScreen = 1
+    } else if (input.pinIsPressed(TouchPin.P0)) {
+        music.setVolume(music.volume() - 20)
+        music.play(music.tonePlayable(262, music.beat(BeatFraction.Whole)), music.PlaybackMode.InBackground)
+        basic.pause(100)
+        continue;
+    } else if (input.pinIsPressed(TouchPin.P1)) {
+        music.setVolume(music.volume() + 20)
+        music.play(music.tonePlayable(262, music.beat(BeatFraction.Whole)), music.PlaybackMode.InBackground)
+        basic.pause(100)
+        continue;
+    }
+}
 let yCounter = 0
 let xCounter = 0
-let startScreen = 0
 let win = 0
 let retry = 0
 let yPos = 0
@@ -9,6 +23,7 @@ let ledsOn = 0
 let counter = 0
 let nextLevel = 0
 let restart = 0
+let startScreen = 0
 let levelNum = 1
 pins.touchSetMode(TouchTarget.P0, TouchTargetMode.Resistive)
 pins.touchSetMode(TouchTarget.P1, TouchTargetMode.Resistive)
@@ -33,19 +48,6 @@ basic.forever(function () {
     while (startScreen == 0 || restart == 1) {
         startScreen = 0
         restart = 0
-        if (input.buttonIsPressed(Button.A) || input.buttonIsPressed(Button.B) || (input.buttonIsPressed(Button.AB) || input.pinIsPressed(TouchPin.P2))) {
-            startScreen = 1
-        } else if (input.pinIsPressed(TouchPin.P0)) {
-            music.setVolume(music.volume() - 20)
-            music.play(music.tonePlayable(262, music.beat(BeatFraction.Whole)), music.PlaybackMode.InBackground)
-            basic.pause(100)
-            continue;
-        } else if (input.pinIsPressed(TouchPin.P1)) {
-            music.setVolume(music.volume() + 20)
-            music.play(music.tonePlayable(262, music.beat(BeatFraction.Whole)), music.PlaybackMode.InBackground)
-            basic.pause(100)
-            continue;
-        }
         basic.showLeds(`
             # # . # #
             # # . # #
@@ -53,6 +55,7 @@ basic.forever(function () {
             . # # # .
             . # . # .
             `)
+        startScreenControls()
         basic.showLeds(`
             . . . . .
             . # # . #
@@ -60,6 +63,7 @@ basic.forever(function () {
             . . # # #
             . . # # #
             `)
+        startScreenControls()
         basic.showLeds(`
             . . . . .
             . . . . .
@@ -67,6 +71,7 @@ basic.forever(function () {
             . . # # .
             . . . # #
             `)
+        startScreenControls()
         basic.showLeds(`
             . . . . #
             . . . . #
@@ -74,6 +79,7 @@ basic.forever(function () {
             . . . # #
             . . . # #
             `)
+        startScreenControls()
         basic.showLeds(`
             . . . # #
             . . . # #
@@ -81,6 +87,7 @@ basic.forever(function () {
             . . . . .
             . . . . #
             `)
+        startScreenControls()
         basic.showLeds(`
             . # # . .
             . . # # #
@@ -88,6 +95,7 @@ basic.forever(function () {
             . . # . #
             . . . . .
             `)
+        startScreenControls()
         if (startScreen == 1) {
             break;
         }
@@ -98,6 +106,7 @@ basic.forever(function () {
             . # # # .
             . # . # .
             `)
+        startScreenControls()
         basic.showLeds(`
             . . . . .
             # . # # .
@@ -105,6 +114,7 @@ basic.forever(function () {
             # # # . .
             # # # . .
             `)
+        startScreenControls()
         basic.showLeds(`
             . . . . .
             . . . . .
@@ -112,6 +122,7 @@ basic.forever(function () {
             . # # . .
             # # . . .
             `)
+        startScreenControls()
         basic.showLeds(`
             # . . . .
             # . . . .
@@ -119,6 +130,7 @@ basic.forever(function () {
             # # . . .
             # # . . .
             `)
+        startScreenControls()
         basic.showLeds(`
             # # . . .
             # # . . .
@@ -126,6 +138,7 @@ basic.forever(function () {
             . . . . .
             # . . . .
             `)
+        startScreenControls()
         basic.showLeds(`
             # . # # .
             # # # . .
@@ -133,6 +146,7 @@ basic.forever(function () {
             # . # . .
             . . . . .
             `)
+        startScreenControls()
     }
     basic.showLeds(`
         # # . # #
