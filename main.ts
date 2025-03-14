@@ -1,5 +1,6 @@
 let yCounter = 0
 let xCounter = 0
+let startScreen = 0
 let win = 0
 let retry = 0
 let yPos = 0
@@ -8,16 +9,13 @@ let ledsOn = 0
 let counter = 0
 let nextLevel = 0
 let restart = 0
-let startScreen = 0
 let levelNum = 1
 pins.touchSetMode(TouchTarget.P0, TouchTargetMode.Resistive)
 pins.touchSetMode(TouchTarget.P1, TouchTargetMode.Resistive)
 pins.touchSetMode(TouchTarget.P2, TouchTargetMode.Resistive)
 pins.touchSetMode(TouchTarget.LOGO, TouchTargetMode.Resistive)
 basic.forever(function () {
-    if (startScreen == 0) {
-    	
-    } else if (input.logoIsPressed()) {
+    if (input.logoIsPressed()) {
         restart = 1
     }
 })
@@ -32,7 +30,6 @@ basic.forever(function () {
     yPos = 0
     retry = 0
     win = 0
-    xCounter = 0
     while (startScreen == 0 || restart == 1) {
         startScreen = 0
         restart = 0
