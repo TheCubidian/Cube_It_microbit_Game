@@ -5,12 +5,10 @@ function startScreenControls () {
         music.setVolume(music.volume() - 20)
         music.play(music.tonePlayable(262, music.beat(BeatFraction.Whole)), music.PlaybackMode.InBackground)
         basic.pause(100)
-        continue;
     } else if (input.pinIsPressed(TouchPin.P1)) {
         music.setVolume(music.volume() + 20)
         music.play(music.tonePlayable(262, music.beat(BeatFraction.Whole)), music.PlaybackMode.InBackground)
         basic.pause(100)
-        continue;
     }
 }
 let yCounter = 0
@@ -24,6 +22,7 @@ let counter = 0
 let nextLevel = 0
 let restart = 0
 let startScreen = 0
+music.setVolume(128)
 let levelNum = 1
 pins.touchSetMode(TouchTarget.P0, TouchTargetMode.Resistive)
 pins.touchSetMode(TouchTarget.P1, TouchTargetMode.Resistive)
@@ -892,7 +891,7 @@ basic.forever(function () {
                 # # # # #
                 `)
         }
-        basic.pause(2000)
+        basic.pause(500)
         led.plot(xPos, yPos)
         while (retry == 0) {
             if (input.buttonIsPressed(Button.AB)) {
@@ -902,7 +901,7 @@ basic.forever(function () {
                     led.unplot(xPos, yPos)
                     xPos += -1
                     led.plot(xPos, yPos)
-                    music.play(music.stringPlayable("E F G - - - - - ", 650), music.PlaybackMode.InBackground)
+                    music.play(music.stringPlayable("E F G - - - - - ", 800), music.PlaybackMode.InBackground)
                     basic.pause(300)
                     counter += 1
                 }
@@ -911,7 +910,7 @@ basic.forever(function () {
                     led.unplot(xPos, yPos)
                     xPos += 1
                     led.plot(xPos, yPos)
-                    music.play(music.stringPlayable("F G A - - - - - ", 650), music.PlaybackMode.InBackground)
+                    music.play(music.stringPlayable("F G A - - - - - ", 800), music.PlaybackMode.InBackground)
                     basic.pause(300)
                     counter += 1
                 }
@@ -920,7 +919,7 @@ basic.forever(function () {
                     led.unplot(xPos, yPos)
                     yPos += -1
                     led.plot(xPos, yPos)
-                    music.play(music.stringPlayable("D E F - - - - - ", 650), music.PlaybackMode.InBackground)
+                    music.play(music.stringPlayable("D E F - - - - - ", 800), music.PlaybackMode.InBackground)
                     basic.pause(300)
                     counter += 1
                 }
@@ -929,7 +928,7 @@ basic.forever(function () {
                     led.unplot(xPos, yPos)
                     yPos += 1
                     led.plot(xPos, yPos)
-                    music.play(music.stringPlayable("G A B - - - - - ", 650), music.PlaybackMode.InBackground)
+                    music.play(music.stringPlayable("G A B - - - - - ", 800), music.PlaybackMode.InBackground)
                     basic.pause(300)
                     counter += 1
                 }
@@ -1005,7 +1004,7 @@ basic.forever(function () {
         music._playDefaultBackground(music.builtInPlayableMelody(Melodies.Nyan), music.PlaybackMode.LoopingInBackground)
         while (true) {
             basic.showNumber(counter)
-            basic.pause(500)
+            basic.pause(100)
             for (let index = 0; index < 5; index++) {
                 basic.showLeds(`
                     . . . . .

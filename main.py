@@ -1,6 +1,20 @@
+def startScreenControls():
+    global startScreen
+    if input.button_is_pressed(Button.A) or input.button_is_pressed(Button.B) or (input.button_is_pressed(Button.AB) or input.pin_is_pressed(TouchPin.P2)):
+        startScreen = 1
+    elif input.pin_is_pressed(TouchPin.P0):
+        music.set_volume(music.volume() - 20)
+        music.play(music.tone_playable(262, music.beat(BeatFraction.WHOLE)),
+            music.PlaybackMode.IN_BACKGROUND)
+        basic.pause(100)
+    elif input.pin_is_pressed(TouchPin.P1):
+        music.set_volume(music.volume() + 20)
+        music.play(music.tone_playable(262, music.beat(BeatFraction.WHOLE)),
+            music.PlaybackMode.IN_BACKGROUND)
+        basic.pause(100)
+yCounter = 0
 xCounter = 0
 win = 0
-yCounter = 0
 retry = 0
 yPos = 0
 xPos = 0
@@ -10,13 +24,14 @@ nextLevel = 0
 restart = 0
 startScreen = 0
 levelNum = 1
+pins.touch_set_mode(TouchTarget.P0, TouchTargetMode.RESISTIVE)
+pins.touch_set_mode(TouchTarget.P1, TouchTargetMode.RESISTIVE)
+pins.touch_set_mode(TouchTarget.P2, TouchTargetMode.RESISTIVE)
+pins.touch_set_mode(TouchTarget.LOGO, TouchTargetMode.RESISTIVE)
 
 def on_forever():
-    global startScreen, restart
-    if startScreen == 0:
-        if input.button_is_pressed(Button.A) or input.button_is_pressed(Button.B) or (input.button_is_pressed(Button.AB) or input.pin_is_pressed(TouchPin.P0) or (input.pin_is_pressed(TouchPin.P1) or input.pin_is_pressed(TouchPin.P2))):
-            startScreen = 1
-    elif input.logo_is_pressed():
+    global restart
+    if input.logo_is_pressed():
         restart = 1
 basic.forever(on_forever)
 
@@ -24,7 +39,7 @@ basic.forever(on_forever)
 # Also includes logic for if a button is pressed, remove the animation and start the game with the game logo.
 
 def on_forever2():
-    global nextLevel, counter, ledsOn, levelNum, xPos, yPos, retry, yCounter, win, xCounter, startScreen, restart
+    global nextLevel, counter, ledsOn, levelNum, xPos, yPos, retry, win, startScreen, restart, xCounter, yCounter
     nextLevel = 0
     counter = 0
     ledsOn = 0
@@ -32,9 +47,7 @@ def on_forever2():
     xPos = 0
     yPos = 0
     retry = 0
-    yCounter = 0
     win = 0
-    xCounter = 0
     while startScreen == 0 or restart == 1:
         startScreen = 0
         restart = 0
@@ -45,6 +58,7 @@ def on_forever2():
             . # # # .
             . # . # .
             """)
+        startScreenControls()
         basic.show_leds("""
             . . . . .
             . # # . #
@@ -52,6 +66,7 @@ def on_forever2():
             . . # # #
             . . # # #
             """)
+        startScreenControls()
         basic.show_leds("""
             . . . . .
             . . . . .
@@ -59,6 +74,7 @@ def on_forever2():
             . . # # .
             . . . # #
             """)
+        startScreenControls()
         basic.show_leds("""
             . . . . #
             . . . . #
@@ -66,6 +82,7 @@ def on_forever2():
             . . . # #
             . . . # #
             """)
+        startScreenControls()
         basic.show_leds("""
             . . . # #
             . . . # #
@@ -73,6 +90,7 @@ def on_forever2():
             . . . . .
             . . . . #
             """)
+        startScreenControls()
         basic.show_leds("""
             . # # . .
             . . # # #
@@ -80,6 +98,7 @@ def on_forever2():
             . . # . #
             . . . . .
             """)
+        startScreenControls()
         if startScreen == 1:
             break
         basic.show_leds("""
@@ -89,6 +108,7 @@ def on_forever2():
             . # # # .
             . # . # .
             """)
+        startScreenControls()
         basic.show_leds("""
             . . . . .
             # . # # .
@@ -96,6 +116,7 @@ def on_forever2():
             # # # . .
             # # # . .
             """)
+        startScreenControls()
         basic.show_leds("""
             . . . . .
             . . . . .
@@ -103,6 +124,7 @@ def on_forever2():
             . # # . .
             # # . . .
             """)
+        startScreenControls()
         basic.show_leds("""
             # . . . .
             # . . . .
@@ -110,6 +132,7 @@ def on_forever2():
             # # . . .
             # # . . .
             """)
+        startScreenControls()
         basic.show_leds("""
             # # . . .
             # # . . .
@@ -117,6 +140,7 @@ def on_forever2():
             . . . . .
             # . . . .
             """)
+        startScreenControls()
         basic.show_leds("""
             # . # # .
             # # # . .
@@ -124,6 +148,7 @@ def on_forever2():
             # . # . .
             . . . . .
             """)
+        startScreenControls()
     basic.show_leds("""
         # # . # #
         # # . # #
@@ -131,8 +156,11 @@ def on_forever2():
         . # # # .
         . # . # .
         """)
+    music._play_default_background(music.built_in_playable_melody(Melodies.ENTERTAINER),
+        music.PlaybackMode.LOOPING_IN_BACKGROUND)
     basic.pause(500)
     basic.show_string(" Cube It!")
+    music.stop_all_sounds()
     while win != 1 and restart != 1:
         retry = 0
         basic.pause(50)
@@ -416,9 +444,9 @@ def on_forever2():
             basic.show_leds("""
                 # # # . .
                 # . . . .
-                # # . . .
-                . . # . .
                 # # # . .
+                . . # . .
+                # # . . .
                 """)
             basic.show_leds("""
                 # # . . #
@@ -862,7 +890,8 @@ def on_forever2():
                 # # . # #
                 # # # # #
                 """)
-        led.plot_brightness(xPos, yPos, 255)
+        basic.pause(2000)
+        led.plot(xPos, yPos)
         while retry == 0:
             if input.button_is_pressed(Button.AB):
                 retry = 1
@@ -870,28 +899,36 @@ def on_forever2():
                 if xPos > 0:
                     led.unplot(xPos, yPos)
                     xPos += -1
-                    led.plot_brightness(xPos, yPos, 255)
+                    led.plot(xPos, yPos)
+                    music.play(music.string_playable("E F G - - - - - ", 650),
+                        music.PlaybackMode.IN_BACKGROUND)
                     basic.pause(300)
                     counter += 1
             elif input.button_is_pressed(Button.B):
                 if xPos < 4:
                     led.unplot(xPos, yPos)
                     xPos += 1
-                    led.plot_brightness(xPos, yPos, 255)
+                    led.plot(xPos, yPos)
+                    music.play(music.string_playable("F G A - - - - - ", 650),
+                        music.PlaybackMode.IN_BACKGROUND)
                     basic.pause(300)
                     counter += 1
             elif input.pin_is_pressed(TouchPin.P1):
                 if yPos > 0:
                     led.unplot(xPos, yPos)
                     yPos += -1
-                    led.plot_brightness(xPos, yPos, 255)
+                    led.plot(xPos, yPos)
+                    music.play(music.string_playable("D E F - - - - - ", 650),
+                        music.PlaybackMode.IN_BACKGROUND)
                     basic.pause(300)
                     counter += 1
             elif input.pin_is_pressed(TouchPin.P0):
                 if yPos < 4:
                     led.unplot(xPos, yPos)
                     yPos += 1
-                    led.plot_brightness(xPos, yPos, 255)
+                    led.plot(xPos, yPos)
+                    music.play(music.string_playable("G A B - - - - - ", 650),
+                        music.PlaybackMode.IN_BACKGROUND)
                     basic.pause(300)
                     counter += 1
             elif input.pin_is_pressed(TouchPin.P2) and levelNum != 10:
@@ -931,11 +968,11 @@ def on_forever2():
                         . . . . .
                         """)
                     basic.show_leds("""
-                        # # # # #
+                        . # # # .
                         # . . . #
                         # . . . #
                         # . . . #
-                        # # # # #
+                        . # # # .
                         """)
                     basic.pause(300)
                 if levelNum == 10:
@@ -953,26 +990,27 @@ def on_forever2():
             . . . . .
             """)
         basic.pause(500)
-        music.set_volume(255)
+        music.set_tempo(120)
         music._play_default_background(music.built_in_playable_melody(Melodies.NYAN),
             music.PlaybackMode.LOOPING_IN_BACKGROUND)
         while True:
             basic.show_number(counter)
             basic.pause(500)
-            basic.show_leds("""
-                . . . . .
-                # . # . #
-                # # . # #
-                # . . . #
-                # # # # #
-                """)
-            basic.show_leds("""
-                . . . . .
-                . # . # .
-                # . # . #
-                # . . . #
-                # # # # #
-                """)
+            for index4 in range(5):
+                basic.show_leds("""
+                    . . . . .
+                    # . # . #
+                    # # . # #
+                    # . . . #
+                    # # # # #
+                    """)
+                basic.show_leds("""
+                    . . . . .
+                    . # . # .
+                    # . # . #
+                    # . . . #
+                    # # # # #
+                    """)
             if restart == 1:
                 basic.show_leds("""
                     . . . . .
@@ -981,7 +1019,6 @@ def on_forever2():
                     # . . . #
                     # # # # #
                     """)
-                basic.pause(2000)
                 music.stop_all_sounds()
                 break
 basic.forever(on_forever2)
